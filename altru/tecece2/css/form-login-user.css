@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    align-items: center;
+
+    min-height: 100vh;
+}
+
+
+.w50 {
+    width: 50%;
+    float: left;
+    padding-right: 15px;
+}
+
+main {
+    background-color: rgb(136, 132, 248);
+}
+
+.box {
+    display: flex;
+    width: 650px;
+    height: 450px;
+    box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.2);
+    border-radius: 18px;
+
+
+
+}
+
+.box1 {
+    justify-content: center;
+    display: flex;
+
+}
+
+.img-box {
+
+
+    width: 50%;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px 0 0 20px;
+}
+
+.img-box img {
+    width: 100%;
+}
+
+.form-box {
+    /* TRANSPARENTE
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(40px);*/
+    background-color: white;
+    padding: 30px 40px;
+    width: 50%;
+    border-radius: 0 20px 20px 0;
+}
+
+.form-box h2 {
+    font-size: 30px;
+}
+
+.form-box p {
+    font-weight: bold;
+    color: #3d3d3d;
+}
+
+.form-box p a {
+    color: hsl(242, 77%, 63%);
+    text-decoration: none;
+}
+
+.form-box form {
+    margin: 20px 0;
+}
+
+form .input-group {
+    margin-bottom: 15px;
+}
+
+form .input-group label {
+    color: #3D3D3D;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+form .input-group input {
+    width: 100%;
+    height: 47px;
+    background-color: #EDEDED;
+    border-radius: 20px;
+    outline: none;
+    border: 2px solid transparent;
+    padding: 15px;
+    font-size: 15px;
+    color: #616161;
+    transition: all 0.4s ease;
+}
+
+form .input-group input:focus {
+    border-color: #3f3c97;
+}
+
+form .input-group button {
+    width: 100%;
+    height: 47px;
+    background: #5A56E9;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    margin-top: 15px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.seJunte {
+    padding-top: 8px;
+}
+
+form .entrarCo1utrasContas {
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+}
+
+
+@media (max-width:930px) {
+    .img-box {
+        display: none;
+    }
+
+    .box {
+        width: 700px;
+        height: 450px;
+
+
+
+    }
+
+    .form-box {
+        width: 100%;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width:500px) {
+    .w50 {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+form li {
+    list-style: none;
+    width: 25px;
+    padding-top: 2%;
+}
+
+.icones {
+    display: flex;
+    justify-content: center;
+}
+
+.icones li {
+    margin: 10px;
+}
+
+.nTemConta {
+    padding-left: 190px;
+}
+
+
+@media (min-width:500px) {
+    #logo {
+        padding: 0;
+
+    }
+}
+
+@media (max-width:280px) {
+
+
+    body {
+        width: 345px;
+    }
+
+}
+
+
+@media (min-width:1000px) {
+
+
+    #box2 {
+        margin: 100px;
+    }
+
+}
+
+
+
+@media (min-width:500px) {
+
+
+    #box2 {
+        margin: 100px;
+    }
+
+}

@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500&display=swap');
+
+body{
+    display: grid;
+    height: 100vh;
+    grid-template-areas: 
+    "aside2 header aside"
+    "aside3 main aside";
+    margin: 0;
+    font-family: 'Raleway';
+
+}
+
+.aside-esquerdo button{
+    position: absolute;
+    width: 304px;
+    height: 304px;
+    left: -122px;
+    top: -152px;
+    border-radius: 1000px;
+    background: #5A56E9;
+    z-index: -1;
+
+   
+}
+
+
+.aside3{
+    grid-area: aside3;
+  
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+}
+
+
+.aside3 button{
+    width: 62px;
+    height: 62px;
+    left: 58.02px;
+    top: 429px;
+    background: #5A56E9;
+    display: block;
+    border-radius: 100px;
+    justify-content: center;
+   
+}
+
+
+
+.aside-direito{
+    grid-area: aside;
+   
+    display: flex;
+    justify-content: center;
+    justify-content: space-between;
+}
+
+
+
+main{
+    grid-area: main;
+    display: flex;
+    justify-content: center;
+  
+    
+}
+
+
+
+header{
+    grid-area: header;
+
+}
+
+
+header a{
+    color: black;
+    font-weight: 600;
+}
+
+header nav section{
+    display: flex;
+    
+    justify-content: right;
+    padding: 20px;
+}
+
+
+
+section img{
+    height: 100px;
+    margin: 0;
+}
+
+.img-b{
+    display: flex;
+    justify-content: right;
+    width: 100px;
+   
+    flex-flow: column;
+    flex: 4;
+}
+
+
+.bola{
+    position: absolute;
+    width: 304px;
+    height: 304px;
+    left: -122px;
+    top: -152px;
+    background: #5A56E9;
+    border-radius: 1000px;
+    display: flex;
+}
+
+
+
+.botao-div{
+   
+    display: flex;
+  
+    flex: 2;
+    justify-content: right;
+    margin: 0;
+    width: 100px;
+}
+
+
+.registre{
+    height: 50px;
+   
+    background-color: pink;
+    border: none;
+    color: #5A56E9;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 10px;
+    margin-top: 55px;
+    justify-content: center;
+    width: 150px;
+   
+}
+
+
+
+
+
+
+
+
+
+
+span{
+  margin-left: 40px;
+
+  
+}
+
+.home{
+    
+}
+
+
+
+
+
+
+.bolinha2{
+   
+    width: 62px;
+    height: 62px;
+    left: 58.02px;
+    top: 429px;
+    background: #5A56E9;
+    border-radius: 100px;
+
+    background: #5A56E9;
+    display: flex;
+}
+
+.bolinha-section button{
+    border-radius: 100px;
+    width: 128px;
+    height: 128px;
+    left: 610px;
+    top: 500px;
+    background: #5A56E9;
+    border: none;
+   
+}
+
+
+.bolinha-section {
+
+    justify-content: right;
+    display: flex;
+   
+}
+
+
+.bolinha-baixa{
+  
+    display: flex;
+    height: 100px;
+    border-radius: 20px;
+    justify-content: right;
+}
+
+.quadrado{
+    width: 65px;
+    background-color: #5A56E9;
+
+    
+}
+
+.direito{
+    height: 80px;
+    width: 10px;
+}
+
+.esquerdo{
+    height: 80px;
+    width: 10px;
+}
+
+
+.borda-img{
+   
+    flex: 4;
+}
+
+
+.ok2{
+    padding-bottom: 190px;
+}
+
+.nome-sistema{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+
+.borda-eclipse{
+    display: flex;
+    flex: 4;
+    
+}
+
+.bolinha-baixa{
+    display: flex;
+ 
+}
+
+.bolinha-baixa button{
+    display: flex;
+}
+
+.jubileu{
+    display: block;
+}
+
+
+header nav a{
+    border: #1D324A solid 2px;
+    margin-top: 50px;
+    display: flex;
+  
+}
+
+.alinha{
+    justify-content: center;
+    justify-content: space-evenly;
+    padding: -10px;
+    font-size: 20px;
+}
+
+.alinha a{
+    text-decoration: none;
+    border: none;
+}
+
+.registre-section{
+   
+    display: flex;
+   
+}
+
+
+.time-1{
+   
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+  
+}
+
+.time-2{
+  
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+}
+
+.time-1 p{
+    border: 0.5px solid rgb(180, 177, 177);
+    border-radius: 10px;
+    border: 0.5px solid #5A56E9;
+   
+  
+}
+
+.time-2 p{
+    border: 0.5px solid #5A56E9;
+     border-radius: 10px;
+}
+
+.time{
+    display: flex;
+    flex-flow: column;
+    border: 0.5px solid #5A56E9;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.geral-img{
+    width: auto;
+    height: 200px;
+    border-radius: 100px;
+}

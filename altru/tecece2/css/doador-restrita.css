@@ -1,0 +1,8 @@
+.container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin: 50px auto;
+    max-width: 1200px;
+    width: 100%;
+  }
