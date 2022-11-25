@@ -3,17 +3,33 @@
 session_start();
 require_once("../model/Ong.php");
 require_once("../model/Post.php");
+require_once("../model/Reacao.php");
+require_once("../model/PrestacaoContasOng.php");
+require_once("../model/ReacaoPrestacao.php");
+
 include_once("valida-permanencia.php");
 
 try {
   $ong = new Ong();
-
   $post = new Post();
+  $reacao = new Reacao();
+  $presta = new PrestacaoContasOng();
+  $reacaoPresta = new ReacaoPrestacao();
+
+  $_SESSION['explorar'] = true;
+
+  if (isset($_SESSION['iddoador'])) {
+    header("Location: ../../BizLand/index.php");
+    unset($_SESSION['idong']);
+    session_destroy();
+  } else if (isset($_SESSION['idong'])) {
+    $tipoPerfil = "ong";
+    $idPerfil = $_SESSION['idong'];
+  }
 
   unset($_SESSION['idOngListar']);
 
-
-
+  $listaPresta = $presta->listarTD();
   $listapost = $post->listarTd();
 } catch (Exception $e) {
   echo $e->getMessage();
@@ -110,22 +126,10 @@ try {
         <div class="section-logo" id="logo">
           <img class="logo" src="../img/Altruismos-removebg-preview 1.png" alt="">
 
-
         </div>
 
-
         <section class="letras-aside" style="border: none;">
-          <?php if (isset($_SESSION['iddoador'])) { ?>
-            <section class="banana" id="home1" id="home1">
-
-              <a href="">
-
-                <img class="icones-side" src="../img/sidedbar/sidebar/menu/casa.png" alt="">
-              </a>
-              <a class="home" onclick="teste()" href="./social2.php">Home</a>
-
-            </section>
-          <?php } ?>
+          
           <section class="banana" id="home1">
             <a href="">
 
@@ -133,28 +137,7 @@ try {
             </a>
             <a class="home" href="./explorar.php">Explorar</a>
           </section>
-          <?php if (isset($_SESSION['iddoador'])) { ?>
-            <!-- <section class="banana" id="home1">
-              <a href="">
 
-                <img class="icones-side" src="../img/sidedbar/sidebar/menu/notification.png" alt="">
-              </a>
-              <a href="" class="home">Notificações
-
-              </a>
-
-
-            </section> -->
-          <?php } ?>
-          <?php if (isset($_SESSION['iddoador'])) { ?>
-            <!-- <section class="banana" id="home1">
-              <a href="">
-                <img style="border-radius: none;" class="icones-side" src="../img/sidedbar/sidebar/menu/mensage.png" alt="">
-
-              </a>
-              <a class="home" href="">Mensagens</a>
-            </section> -->
-          <?php } ?>
           <section class="banana" id="home1" id="home12">
             <a href="">
 
@@ -173,11 +156,6 @@ try {
           <!-- <section class="banana-button">
             <button style="border: 2px solid red;" class="doar home" id="doar" type="button">Doar</button>
           </section> -->
-
-
-
-
-
 
           <script>
             //const h1 = document.getElementById('asideEsquerdo')
@@ -213,19 +191,9 @@ try {
     </section>
   </aside>
 
-
-
-
-
-
   <main id="elemento-chave" style="border: none;">
 
     <section style="border: 1px solid #E6ECF0;">
-
-
-
-
-
 
       <script>
         const teste = () => {
@@ -257,6 +225,8 @@ try {
         $idPost = $post['idpost'];
       ?>
 
+
+
         <section class="frase-do-img">
           <form action="./social.php" method="post">
             <button type="submit" name="idOng" value="<?php echo $idOng ?>">
@@ -272,7 +242,11 @@ try {
         <section class="">
           <section class="frase">
             <section class="juncao">
-              <p class="desc"><?php echo $post['msgpost'] ?></p>
+              <form action="./tela-comentario.php" method="post">
+                <button type="submit" value="<?php echo $idPost ?>" name="btnComentar">
+                  <p class="desc"><?php echo $post['msgpost'] ?></p>
+                </button>
+              </form>
             </section>
 
             <section>
@@ -282,29 +256,95 @@ try {
           </section>
         </section>
 
+        <form action="" method="" id="form-curtir">
+          <?php
+          if ($reacao->verificar($idPost, $tipoPerfil, $idPerfil) == "curtiu") {
+          ?>
+            <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',1);" name="idPost" value="<?php echo $idPost ?>">
 
+              <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao-vermelho">
+            <?php } else { ?>
 
-        <?php if(isset($_SESSION['iddoador'])) {?>
+              <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',0);" name="idPost" value="<?php echo $idPost ?>">
 
-          <form action="./reagir.php" method="post">
+                <img src="./coracao.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao">
+              <?php } ?>
+              </button>
 
-            <button type="submit">
-              <img src="./coracao.png" alt="">
+        </form>
+
+        <?php
+        $dataCurtida = date('Y-m-d H:i:s');
+        ?>
+
+        <br>
+
+        <?php
+        foreach ($listaPresta as $presta) {
+          $idOng = $presta['idong'];
+          $idPresta = $presta['idPrestacaoContasOng'];
+        ?>
+
+          <section class="frase-do-img">
+            <form action="./social.php" method="post">
+              <button type="submit" name="idOng" value="<?php echo $idOng ?>">
+                <img src="./foto-perfil-ong/<?php echo $presta['fotoong'] ?>" style="border-radius: 50%; width: 50px; height: 50px;" alt="">
+              </button>
+            </form>
+            <p class="nome-ong"><?php echo $nomeOng = $presta['nomeong'] ?></p>
+            <!-- <p> @ADB</p> -->
+            <img class="img-pub-v" src="../img-social/tweet/Vector (1).png" alt="">
+            <p><?php echo $presta['dataRecebimento'] ?></p>
+          </section>
+
+          <section class="">
+            <section class="frase">
+              <section class="juncao">
+                <p class="desc"><?php echo $presta['descProdutosRecebidos'] ?></p>
+              </section>
+              <p class="desc"><?php echo $presta['quantidadeItensRecebido'] ?></p>
+
+              <section>
+                <img class="img-responsive" src="./social-img/<?php echo $presta['fotoOng'] ?>" alt="">
+              </section>
+
+              <section>
+                <img class="img-responsive" src="./social-img/<?php echo $presta['fotoDoador'] ?>" alt="">
+              </section>
+
+            </section>
+          </section>
+
+          <form action="./reagirPresta.php" method="post">
+
+            <button type="submit" name="idPrestacao" value="<?php echo $idPresta ?>">
+
+              <?php
+              if ($reacaoPresta->verificar($idPresta, $tipoPerfil, $idPerfil) == "curtiu") {
+              ?>
+                <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;">
+              <?php } else { ?>
+                <img src="./coracao.png" alt="" style="width: 50px; height: 50px;">
+              <?php } ?>
             </button>
 
-          </form>
-          
-
-          <form action="./tela-comentario.php" method="post">
-            <button type="submit" value="<?php echo $idPost?>" name="btnComentar">COMENTAR</button>
           </form>
 
         <?php } ?>
 
-      <?php } ?>
-
 
     </section>
+
+
+
+    <br>
+
+
+
+  <?php } ?>
+
+
+  </section>
 
   </main>
 
@@ -342,7 +382,45 @@ try {
   </aside>
 
 
+  <script type="text/javascript">
+    function valorBotao(postagem, reacao, perfil, iddoador, imagem) {
 
+      idPost = postagem;
+      tipoReacao = reacao;
+      tipoPerfil = perfil;
+      idDoador = iddoador;
+
+      var img = imagem;
+
+      if (img == 0) {
+        img = img + 1;
+        document.getElementById("imagem-coracao").src = "./coracao-vermelho.png";
+        document.location.reload(false);
+      } else if (img > 0) {
+        document.getElementById("imagem-coracao-vermelho").src = "./coracao.png";
+        document.location.reload(false);
+      }
+
+      event.preventDefault();
+
+      $.ajax({
+        type: "POST",
+        url: "reagir.php",
+        data: {
+          tipo: tipoReacao,
+          tipoperfil: tipoPerfil,
+          idperfil: idDoador,
+          idpost: idPost
+        },
+        success: function(data) {
+          console.log("curtiu");
+
+        }
+      });
+
+
+    }
+  </script>
 
 
 </body>

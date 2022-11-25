@@ -1,6 +1,6 @@
 <?php
 
-    header("Location: ./social.php");
+    header("Location: ./social-doador.php");
     session_start();
 
     require_once("../model/Seguindo.php");
@@ -26,6 +26,7 @@
         $_SESSION['seguindo'] = true;
 
     }
-
+    
+    $_SESSION['recarregar'] == true;
 
 ?>

@@ -44,6 +44,14 @@
 
 
 
+<style>
+
+
+  .modal-body:hover{
+    border: 2px solid whitesmoke;
+  }
+</style>
+
 
 <!-- Modal -->
 <div class="modal fade" style="border: 0;" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -53,21 +61,31 @@
 
 
       </div>
-      <section style="border: 0; " class="edit-modal" style="border: none; display: flex;">
-        <div class="modal-body" style="display: flex;">
-          <a class="registre-doador" href="../tecece2/restrict/form-user.php">Sou Doador</a>
-          <img src="../../BizLand/assets/img/Doador.png" alt="">
+
+    
+      <section style="border: 0; " class="edit-modal" style="border: none; display: flex; background-color: white; padding: 100px;">
+        <a href="./form-user.php">
+
+
+          <div class="modal-body"  style="display: flex; background-color: #5A56E9; flex-direction: column; align-items: center;padding:20px ;">
+            <h5 class="registre-doador"  style="font-weight: 600; color: white;">Sou Doador...</h5>
+            <img src="../../BizLand/assets/img/mao14.png" style="width: 100px;" alt="">
+  
+          </div>
+        </a>
+        <div class="modal-bod" style="padding: 20px;" style="width: 50px;" disable>
 
         </div>
-        <div class="modal-bod" style="padding: 20px;" disable>
 
+        <a href="./form-user-ong.php">
+        <div class="modal-body" style="display: flex; background-color: #5A56E9; flex-direction: column; align-items: center;padding:30px ;">
+
+          <h5 class="registre-doador" style="color: white; font-weight: 600;" >Sou Ong...</h5>
+          <img src="../../BizLand/assets/img/mao13.png" style="width: 50px;" alt="">
+
+          
         </div>
-
-        <div class="modal-body" style="display: flex;">
-          <a class="registre-doador" href="../tecece2/restrict/form-user-ong.php">Sou Ong</a>
-          <img src="../../BizLand/assets/img/ongsOuDoador1.png" alt="">
-
-        </div>
+      </a>
       </section>
       <div class="modal-footer" style="border: 0; ">
 
@@ -91,23 +109,20 @@
 
     <nav id="navbar" class="navbar">
       <ul>
-        <li><a style="text-decoration: none; color: white;" class="nav-link scrollto active" href="../../BizLand/">Home</a></li>
-        <li><a class="nav-link scrollto" href="../../BizLand/">Sobre</a></li>
+      <li><a style="text-decoration: none; color: white;" class="nav-link scrollto active" href="../../BizLand/index.php">Home</a></li>
+          
         </a></li>
-        <li><a class="nav-link scrollto " href="../../BizLand/">Projetos</a></li>
-        <li><a class="nav-link scrollto" href="../../BizLand/">Time</a></li>
-        <li><a class="nav-link scrollto" href="../../BizLand/">Contato</a></li>
-
-
-
-
+        
+        <li><a class="nav-link scrollto"  href="../../BizLand/index.php">Time</a></li>
+        <li><a class="nav-link scrollto"  href="../../BizLand/index.php">Contato</a></li>
+        <li><a class="nav-link scrollto"   href="../../BizLand/index.php" >Projetos</a></li>
+        
+        <li class="dropdown"><a href="./login-user.php"><span class="login">Login</span> <i class="bi bi-chevron"></i></a>
+        
         <li><a id="#cor-button" class="nav-link scrollto" href="#services"><button style="font-weight: 700;" type="button" class="btn-login" data-bs-toggle="modal" data-bs-target="#exampleModal">
               Registre-se
             </button>
         </li>
-
-        <li class="dropdown"><a href="login-user.php"><span class="login">Login</span> <i class="bi bi-chevron"></i></a>
-
       </ul>
       </li>
       </ul>
@@ -118,19 +133,6 @@
 
   </div>
 </header><!-- End Header -->
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <body style="display: block; margin: 0; ">
 
@@ -182,7 +184,7 @@
           <form method="POST" action="./valida-acesso.php">
             <div class="input-group">
               <label for="email">E-mail</label>
-              <input style="  border-radius: 20px ;" type="text" id="txtEmail" name="txtEmail" placeholder="Digite seu e-mail" required>
+              <input style="border-radius: 20px ;" type="text" id="txtEmail" name="txtEmail" placeholder="Digite seu e-mail" required>
             </div>
 
             <div class="input-group">
@@ -198,7 +200,6 @@
               <!-- <p style="background-color: red;">Email ou senha incorretos</p> -->
               <label for="">Email ou senha incorretos</label>
             <?php } ?>
-
 
 
           </form>
