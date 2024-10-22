@@ -29,7 +29,6 @@ try {
 
   unset($_SESSION['idOngListar']);
 
-  $listaPresta = $presta->listarTD();
   $listapost = $post->listarTd();
 } catch (Exception $e) {
   echo $e->getMessage();
@@ -129,7 +128,7 @@ try {
         </div>
 
         <section class="letras-aside" style="border: none;">
-          
+
           <section class="banana" id="home1">
             <a href="">
 
@@ -193,6 +192,32 @@ try {
 
   <main id="elemento-chave" style="border: none;">
 
+    <script type="text/javascript">
+      $(function() {
+        $('.carregando').hide();
+        $('#tipo_publicacao').change(function() {
+
+
+          if ($('#tipo_publicacao').val() == 2) {
+            window.location.href = "http://localhost/altruismus2/altru/tecece2/restrict/prestacoes-explorar-ong.php";
+          }
+
+        })
+      })
+
+      // document.location.reload(false);
+    </script>
+
+    <form action="" method="post">
+      <label>Tipo de publicação</label>
+      <select name="tipo_publicacao" id="tipo_publicacao">
+
+        <option value="1" selected>Pedido</option>
+        <option value="2">Prestação de contas</option>
+
+      </select>
+    </form>
+
     <section style="border: 1px solid #E6ECF0;">
 
       <script>
@@ -238,6 +263,12 @@ try {
           <img class="img-pub-v" src="../img-social/tweet/Vector (1).png" alt="">
           <p><?php echo $post['dtpost'] ?></p>
         </section>
+        <section>
+          <p>Quantidade: <?php echo $post['quantidadeitensdoacao'] ?></p>
+        </section>  
+        <section>
+          <p>Precisamos de: <?php echo $post['descitem'] ?></p>
+        </section> 
 
         <section class="">
           <section class="frase">
@@ -278,60 +309,6 @@ try {
         ?>
 
         <br>
-
-        <?php
-        foreach ($listaPresta as $presta) {
-          $idOng = $presta['idong'];
-          $idPresta = $presta['idPrestacaoContasOng'];
-        ?>
-
-          <section class="frase-do-img">
-            <form action="./social.php" method="post">
-              <button type="submit" name="idOng" value="<?php echo $idOng ?>">
-                <img src="./foto-perfil-ong/<?php echo $presta['fotoong'] ?>" style="border-radius: 50%; width: 50px; height: 50px;" alt="">
-              </button>
-            </form>
-            <p class="nome-ong"><?php echo $nomeOng = $presta['nomeong'] ?></p>
-            <!-- <p> @ADB</p> -->
-            <img class="img-pub-v" src="../img-social/tweet/Vector (1).png" alt="">
-            <p><?php echo $presta['dataRecebimento'] ?></p>
-          </section>
-
-          <section class="">
-            <section class="frase">
-              <section class="juncao">
-                <p class="desc"><?php echo $presta['descProdutosRecebidos'] ?></p>
-              </section>
-              <p class="desc"><?php echo $presta['quantidadeItensRecebido'] ?></p>
-
-              <section>
-                <img class="img-responsive" src="./social-img/<?php echo $presta['fotoOng'] ?>" alt="">
-              </section>
-
-              <section>
-                <img class="img-responsive" src="./social-img/<?php echo $presta['fotoDoador'] ?>" alt="">
-              </section>
-
-            </section>
-          </section>
-
-          <form action="./reagirPresta.php" method="post">
-
-            <button type="submit" name="idPrestacao" value="<?php echo $idPresta ?>">
-
-              <?php
-              if ($reacaoPresta->verificar($idPresta, $tipoPerfil, $idPerfil) == "curtiu") {
-              ?>
-                <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;">
-              <?php } else { ?>
-                <img src="./coracao.png" alt="" style="width: 50px; height: 50px;">
-              <?php } ?>
-            </button>
-
-          </form>
-
-        <?php } ?>
-
 
     </section>
 

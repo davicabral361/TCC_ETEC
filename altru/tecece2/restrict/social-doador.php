@@ -7,6 +7,7 @@ session_start();
 require_once("../model/Ong.php");
 require_once("../model/Post.php");
 require_once("../model/Reacao.php");
+require_once("../model/ReacaoComent.php");
 include_once("valida-permanencia.php");
 require_once("../model/Seguindo.php");
 require_once("../model/PrestacaoContasOng.php");
@@ -19,8 +20,14 @@ try {
   $reacao = new Reacao();
   $presta = new PrestacaoContasOng();
   $reacaoPresta = new ReacaoPrestacao();
+  $reacaoComent = new ReacaoComent();
+
+  $listarSeguindo = $seguindo->listarSeguindo($_SESSION['iddoador']);
 
   if (isset($_SESSION['idOngListar'])) {
+    $quantSeguidores = $seguindo->countSeguidores($_SESSION['idOngListar']);
+    $quantReacoes = $reacao->countReacao($_SESSION['idOngListar'],"ong");
+    $quantReacoesComent = $reacaoComent->countReacaoComent($_SESSION['idOngListar'],"ong");
     $listapost = $post->listar($_SESSION['idOngListar']);
     $verificacao = $seguindo->verificarSeguir($_SESSION['iddoador'], $_SESSION['idOngListar']);
     if ($verificacao[0] <= 0) {
@@ -30,6 +37,9 @@ try {
     }
   } else {
     $idListar = $_POST['idOng'];
+    $quantReacoes = $reacao->countReacao($idListar,"ong");
+    $quantReacoesComent = $reacaoComent->countReacaoComent($idListar,"ong");
+    $quantSeguidores = $seguindo->countSeguidores($idListar);
     $verificacao = $seguindo->verificarSeguir($_SESSION['iddoador'], $idListar);
     if ($verificacao[0] <= 0) {
       unset($_SESSION['seguindo']);
@@ -233,7 +243,7 @@ if (isset($_SESSION['iddoador'])) {
 
             <section class="banana" id="home14" style="padding-top: 20px; justify-content: left;align-items: center; display: flex; flex-direction: column; " style="display: flex; justify-content: center;">
 
-              <section style="display: flex; flex-direction: column; border-radius: 10px;padding: 10px; border: 1px solid ; " class="rosa" id="rosa">
+              <!-- <section style="display: flex; flex-direction: column; border-radius: 10px;padding: 10px; border: 1px solid ; " class="rosa" id="rosa">
 
                 <script>
                   const rosa = document.getElementById('rosa')
@@ -268,7 +278,7 @@ if (isset($_SESSION['iddoador'])) {
 
 
 
-              </section>
+              </section> -->
 
             </section>
           </section>
@@ -468,9 +478,9 @@ if (isset($_SESSION['iddoador'])) {
 
               <section style="display: flex;flex-direction: column; padding: 10px;">
 
-                <p for="" id="slamn">Seguidores: 0</p>
+                <p for="" id="slamn">Seguidores: <?php echo $quantSeguidores ?></p>
 
-                <p for="" id="slamn">Reações: 0</p>
+                <p for="" id="slamn">Reações: <?php echo($quantReacoes + $quantReacoesComent); ?></p>
               </section>
 
 
@@ -542,9 +552,9 @@ if (isset($_SESSION['iddoador'])) {
 
               <div class="portfolio-container" data-aos="fade-up" data-aos-delay="200" style="display: flex; flex-direction: column; ">
 
-                <?php 
-                  foreach ($listapost as $post) { 
-                    $idPost = $post['idpost']
+                <?php
+                foreach ($listapost as $post) {
+                  $idPost = $post['idpost']
                 ?>
 
                   <div class="portfolio-item filter-app" style="border: 2px solid #5A56E9;">
@@ -725,31 +735,28 @@ if (isset($_SESSION['iddoador'])) {
                   </style>
                 </section>
 
-                <section style="display: flex;padding: 0;margin-top: 10px;" class="cortalvez">
-                  <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
-                  <section style="display: flex; flex-direction: column;">
-                    <p style="font-weight: 600;">Fuladno</p>
-                    <button class="seguindo2"> Seguindo</button>
+                <?php
+
+                foreach ($listarSeguindo as $listar) {
+                  $idOng = $listar['idong'];
+                ?>
+
+                  <section style="display: flex;padding: 0;margin-top: 10px;" class="cortalvez">
+                    <img style="width: 50px; height: 50px; border-radius: 100px;" src="./foto-perfil-ong/<?php echo $listar['fotoong'] ?>" alt="">
+                    <section style="display: flex; flex-direction: column;">
+                      <p style="font-weight: 600;"><?php echo $listar['nomeong'] ?></p>
+                      <form action="./social-doador.php" method="post">
+                        <button name="idOng" class="seguindo2" value="<?php echo $idOng ?>">Seguindo</button>
+                      </form>
+
+                    </section>
 
                   </section>
-                </section>
 
-                <section style="display: flex; padding: 0;" class="cortalvez">
-                  <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
-                  <section style="display: flex; flex-direction: column;">
-                    <p style="font-weight: 600;">Fuladno</p>
-                    <button class="seguindo2"> Seguindo</button>
+                <?php } ?>
 
-                  </section>
-                </section>
-                <section style="display: flex; padding: 0;" class="cortalvez">
-                  <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
-                  <section style="display: flex; flex-direction: column;">
-                    <p style="font-weight: 600;">Fuladno</p>
-                    <button class="seguindo2"> Seguindo</button>
 
-                  </section>
-                </section>
+
               </section>
 
             </section>

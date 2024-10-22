@@ -32,7 +32,7 @@ try {
   unset($_SESSION['idOngListar']);
   $listarSeguindo = $seguindo->listarSeguindo($_SESSION['iddoador']);
 
-  $listapost = $post->listarTd();
+  $listapost = $post->listarDeSeguidores($_SESSION['iddoador']);
 } catch (Exception $e) {
   echo $e->getMessage();
 }
@@ -267,11 +267,43 @@ try {
 
   <main id="elemento-chave" style="border: none; margin-top: 13px;order: 1; ">
 
+    <script type="text/javascript">
+      $(function() {
+        $('.carregando').hide();
+        $('#tipo_publicacao').change(function() {
+
+
+          if ($('#tipo_publicacao').val() == 2) {
+            window.location.href = "http://localhost/altruismus2/altru/tecece2/restrict/prestacoes.php";
+          }
+
+        })
+      })
+
+      // document.location.reload(false);
+    </script>
+
+    <form action="" method="post">
+      <label>Tipo de publicação</label>
+      <select name="tipo_publicacao" id="tipo_publicacao">
+
+        <option value="1" selected>Pedido</option>
+        <option value="2">Prestação de contas</option>
+
+      </select>
+    </form>
+
+    <span class="carregando">Aguarde...</span>
+    <br>
+    <br>
+
     <?php
+
     foreach ($listapost as $post) {
 
       $idOng = $post['idong'];
       $idPost = $post['idpost'];
+
     ?>
 
       <section style="display: flex;justify-content: center; flex-direction: column-reverse;">
@@ -309,7 +341,7 @@ try {
               <section class="juncao" style="display: flex; justify-content: center;">
                 <p id="headerletter2"><?php echo $post['msgpost'] ?></p>
               </section>
-              
+
               <section style="display: flex; justify-content: center;">
                 <img style="width: 300px;" src="./social-img/<?php echo $post['imagempost'] ?>" alt="">
               </section>
@@ -359,8 +391,6 @@ try {
 
 
   </main>
-
-
 
 
   <aside class="aside-direito" style="display: flex; flex-direction: column; background-color: #e9ebf7;">
@@ -431,11 +461,7 @@ try {
         </style>
 
 
-
-
       </section>
-
-
 
     </section>
 
@@ -457,14 +483,7 @@ try {
     </section>
 
 
-
-
     </section>
-
-
-
-
-
 
   </aside>
 

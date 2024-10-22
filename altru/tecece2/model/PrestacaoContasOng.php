@@ -85,6 +85,24 @@
             return $lista;   
         }
 
+        public function listarDosSeguidores($idDoador) {
+            $conexao = Conexao::conectar();
+            $query = 
+                "SELECT 
+                    idPrestacaoContasOng,quantidadeItensRecebido,descProdutosRecebidos,fotoDoador,dataRecebimento,
+                    tbong.fotoong,tbong.nomeong,tbprestacaocontasong.fotoOng,tbong.idong
+                FROM tbprestacaocontasong
+                INNER JOIN tbong 
+                    ON tbong.idong = tbprestacaocontasong.idong
+                    INNER JOIN tbseguindo
+                        ON tbseguindo.idong = tbong.idong
+                WHERE tbseguindo.iddoador = $idDoador  
+                ORDER BY idPrestacaoContasOng DESC";
+            
+            $resultado = $conexao->query($query);
+            return $resultado->fetchAll();
+        }
+
         public function listar($id){
             $conexao = Conexao::conectar();
             $querySelect = "SELECT idPrestacaoContasOng,quantidadeItensRecebido,descProdutosRecebidos,fotoDoador,dataRecebimento,tbong.fotoong,tbong.nomeong,tbprestacaocontasong.fotoOng

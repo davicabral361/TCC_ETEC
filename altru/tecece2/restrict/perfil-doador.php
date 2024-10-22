@@ -5,6 +5,7 @@ require_once("../model/Doador.php");
 require_once("../model/Post.php");
 require_once("../model/Seguindo.php");
 require_once("../model/Reacao.php");
+require_once("../model/ReacaoComent.php");
 
 include_once("valida-permanencia.php");
 
@@ -15,6 +16,7 @@ try {
   $ong = new Ong();
   $seguindo = new Seguindo();
   $reacao = new Reacao();
+  $reacaoComent = new ReacaoComent();
 
   if (isset($_SESSION['iddoador'])) {
     $perfilDoador = $doador->getDoador($_SESSION['iddoador']);
@@ -328,17 +330,16 @@ try {
             <?php
             $quantidade = $seguindo->countSeguindo($_SESSION['iddoador']);
             $quantidadeReacao = $reacao->countReacao($_SESSION['iddoador'], 'doador');
+            $quantReacoesComent = $reacaoComent->countReacaoComent($_SESSION['iddoador'],"doador");
             ?>
 
             <p id="slamn" style="color: black;font-weight: 600; ">Seguindo: <?php echo $quantidade ?> </p>
-            <p id="slamn" style="color: black;font-weight: 600; ">Reações: <?php echo $quantidadeReacao ?> </p>
+            <p id="slamn" style="color: black;font-weight: 600; ">Reações: <?php echo ($quantidadeReacao + $quantReacoesComent) ?> </p>
           </section>
 
           <section style="padding: 10px;">
-
             <p id="slamn" style="color: black;font-weight: 600;" for=""><?php echo $telefoneDoador ?></p>
-            <p id="slamn" style="color: black;font-weight: 600;"> Data de entrada: <?php $inscricao = implode("/", array_reverse(explode("-", $entrada)));
-                                                                                    echo $inscricao ?> </p>
+            <p id="slamn" style="color: black;font-weight: 600;"> Data de entrada: <?php echo date('d/m/y H:i:s', strtotime($entrada)) ?> </p>
           </section>
 
           <style>

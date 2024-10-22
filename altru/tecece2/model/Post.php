@@ -8,6 +8,8 @@
         private $idOng;
         private $msg;
         private $dtPost;
+        private $quantidadeItensDoacao;
+        private $descItem;
         private $img;
 
         public function getIdPost() {
@@ -29,6 +31,12 @@
         public function getDtPost() {
             return $this->dtPost;
         }
+        public function getQuantidadeItensDoacao() {
+            return $this->quantidadeItensDoacao;
+        }
+        public function getDescItem() {
+            return $this->descItem;
+        }
 
         public function setDtPost($dtPost) {
             $this->dtPost = $dtPost;
@@ -49,17 +57,28 @@
         public function setImg($img) {
             $this->img = $img;
         }
+        
+        public function setQuantidadeItensDoacao($quantidadeItensDoacao) {
+            $this->quantidadeItensDoacao = $quantidadeItensDoacao;
+        }
+
+        public function setDescItem($descItem) {
+            $this->descItem = $descItem;
+        }
+        
 
         public function postagem($post) {
             $conexao = Conexao::conectar();
-            $stmt = $conexao->prepare("INSERT INTO tbpost (idpost,msgpost,dtpost,imagempost,idong,atividade) VALUES(?,?,?,?,?,?)");
+            $stmt = $conexao->prepare("INSERT INTO tbpost(idpost,msgpost,dtpost,imagempost,idong,quantidadeitensdoacao,descitem,atividade) VALUES(?,?,?,?,?,?,?,?)");
     
             $stmt->bindValue(1,$post->getIdPost());
             $stmt->bindValue(2,$post->getMsg());
             $stmt->bindValue(3,$post->getDtPost());
             $stmt->bindValue(4,$post->getImg());
             $stmt->bindValue(5,$post->getIdOng());
-            $stmt->bindValue(6,1);
+            $stmt->bindValue(6,$post->getQuantidadeItensDoacao());
+            $stmt->bindValue(7,$post->getDescItem());
+            $stmt->bindValue(8,1);
 
             $stmt->execute();
         }
@@ -67,7 +86,7 @@
         public function listarPostId($idPost) {
             $conexao = Conexao::conectar();
             $querySelect = "SELECT 
-                            tbpost.idpost,msgpost,dtpost,imagempost,nomeong, tbong.idong,fotoong
+                            tbpost.idpost,msgpost,dtpost,imagempost,nomeong,quantidadeitensdoacao,descitem tbong.idong,fotoong
                             FROM tbpost
                             INNER JOIN tbong
                             ON tbong.idong = tbpost.idong
@@ -81,7 +100,7 @@
         public function listar($id){
             $conexao = Conexao::conectar();
             $querySelect = "SELECT 
-                            tbpost.idpost,msgpost,dtpost,imagempost,tbong.nomeong, tbong.idong,fotoong
+                            tbpost.idpost,msgpost,dtpost,imagempost,tbong.nomeong,quantidadeitensdoacao,descitem, tbong.idong,fotoong
                             FROM tbpost
                             INNER JOIN tbong
                             ON tbong.idong = tbpost.idong
@@ -95,7 +114,7 @@
         public function listarTd(){
             $conexao = Conexao::conectar();
             $querySelect = "SELECT 
-                                tbpost.idpost,msgpost,dtpost,imagempost,nomeong,tbong.idong,fotoong
+                                tbpost.idpost,msgpost,dtpost,imagempost,nomeong,quantidadeitensdoacao,descitem,tbong.idong,fotoong
                             FROM tbpost
                             INNER JOIN tbong
                             ON tbong.idong = tbpost.idong
@@ -110,7 +129,7 @@
         public function listarDeSeguidores($seguidor){
             $conexao = Conexao::conectar();
             $querySelect = "SELECT 
-                                tbpost.idpost,msgpost,dtpost,imagempost,nomeong,tbong.idong,fotoong
+                                tbpost.idpost,msgpost,dtpost,imagempost,nomeong,quantidadeitensdoacao,descitem,tbong.idong,fotoong
                             FROM tbpost
                             INNER JOIN tbong
                                 ON tbong.idong = tbpost.idong
@@ -140,7 +159,7 @@
 
             $querySelect=
             "SELECT 
-                tbong.idong,nomeong,msgpost,imagempost,fotoong,dtpost,tbpost.idpost
+                tbong.idong,nomeong,msgpost,imagempost,fotoong,dtpost,quantidadeitensdoacao,descitem,tbpost.idpost
             FROM tbpost 
             INNER JOIN tbong
             ON tbpost.idong = tbong.idong

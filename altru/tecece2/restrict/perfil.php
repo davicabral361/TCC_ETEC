@@ -3,9 +3,9 @@ session_start();
 require_once("../model/Ong.php");
 require_once("../model/Doador.php");
 require_once("../model/Post.php");
-require_once("../model/ItensDoacao.php");
 require_once("../model/Seguindo.php");
 require_once("../model/Reacao.php");
+require_once("../model/ReacaoComent.php");
 require_once("../model/PrestacaoContasOng.php");
 
 include_once("valida-permanencia.php");
@@ -15,14 +15,14 @@ try {
   $post = new Post();
   $doador = new Doador();
   $ong = new Ong();
-  $doacao = new ItensDoacao();
   $seguindo = new Seguindo();
   $reacao = new Reacao();
+  $reacaoComent = new ReacaoComent();
   $prestacao = new PrestacaoContasOng();
 
-
   $quantidade = $seguindo->countSeguidores($_SESSION['idong']);
-  $countReacao = $reacao->countReacao($_SESSION['idong'], 'ong');
+  $quantReacoesComent = $reacaoComent->countReacaoComent($_SESSION['idong'], "ong");
+  $countReacao = $reacao->countReacao($_SESSION['idong'], "ong");
 
   if (isset($_SESSION['iddoador'])) {
     header("Location: ../../BizLand/index.php");
@@ -52,7 +52,6 @@ try {
 <?php
 if (isset($_SESSION['idong'])) {
   $listapost = $post->listar($_SESSION['idong']);
-  $listdoacao = $doacao->listar($_SESSION['idong']);
   $perfilOng = $ong->getOng($_SESSION['idong']);
 ?>
 
@@ -374,9 +373,9 @@ if (isset($_SESSION['idong'])) {
 
             <section style="display: flex; ">
 
-              <p for="" id="slamn" style="margin-right:15px;">Seguidores <?php echo $quantidade ?></p>
+              <p for="" id="slamn" style="margin-right:15px;">Seguidores: <?php echo $quantidade ?></p>
 
-              <p for="" id="slamn">Reações: <?php echo $countReacao ?></p>
+              <p for="" id="slamn">Reações: <?php echo ($countReacao + $quantReacoesComent) ?></p>
             </section>
 
 
@@ -781,8 +780,13 @@ if (isset($_SESSION['idong'])) {
                   <div class="portfolio-wrap">
 
                     <div class="portfolio-info">
-                      <?php
-                      foreach ($listapost as $post) { ?>
+                    <?php
+                      foreach ($listapost as $post) {
+
+                        $idPost = $post['idpost'];
+                        $tipoPerfil = "ong";
+
+                      ?>
 
 
 
@@ -796,6 +800,14 @@ if (isset($_SESSION['idong'])) {
                             <p><?php echo $post['dtpost'] ?></p>
                           </section>
 
+                          <section>
+                            <p><?php echo $post['quantidadeitensdoacao'] ?></p>
+                          </section>
+
+                          <section>
+                            <p><?php echo $post['descitem'] ?></p>
+                          </section>
+
                           <section class="mensagens2">
 
                             <p><?php echo $post['msgpost'] ?></p>
@@ -804,31 +816,27 @@ if (isset($_SESSION['idong'])) {
                             <img class="img-violino" style="height: 400px; width: 400px; " src="./social-img/<?php echo $post['imagempost'] ?>" alt="">
 
 
-                          </section>
+                            <section style="border-top: 2px solid #5A56E9; padding-left: 30%; " class="hover">
+                              <form action="" method="" id="form-curtir">
+                                <?php
+                                if ($reacao->verificar($idPost, $tipoPerfil, $idPerfil) == "curtiu") {
+                                ?>
+                                  <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',1);" name="idPost" value="<?php echo $idPost ?>">
 
-                        </div>
-                    </div>
-                  </div>
+                                  <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao-vermelho">
+                                <?php } else { ?>
 
-                <?php } ?>
-                </div>
+                                  <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',0);" name="idPost" value="<?php echo $idPost ?>">
 
-                <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                  <div class="portfolio-wrap">
+                                  <img src="./coracao.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao">
+                                <?php } ?>
+                                </button>
 
-                    <div class="portfolio-info">
-                      <?php
-                      foreach ($listdoacao as $doacao) { ?>
+                              </form>
 
-
-
-                        <div style="justify-content: center;">
-                          <section class="mensagens" style="display: flex;">
-                            <p><?php echo $doacao['quantidadeitensdoacao'] ?></p>
+                            </section>
 
                           </section>
-                          <p><?php echo $doacao['datadoacao'] ?></p>
-                          <p><?php echo $doacao['descitem'] ?></p>
 
                         </div>
                     </div>
@@ -958,6 +966,59 @@ if (isset($_SESSION['idong'])) {
     </aside>
 
     </aside>
+
+    <script type="text/javascript">
+      var posicao = localStorage.getItem('posicaoScroll');
+
+      if (posicao) {
+        /* Timeout necessário para funcionar no Chrome */
+        setTimeout(function() {
+          window.scrollTo(0, posicao);
+        }, 1);
+      }
+
+      window.onscroll = function(e) {
+        posicao = window.scrollY;
+        localStorage.setItem('posicaoScroll', JSON.stringify(posicao));
+      }
+
+      function valorBotao(postagem, reacao, perfil, iddoador, imagem) {
+
+        idPost = postagem;
+        tipoReacao = reacao;
+        tipoPerfil = perfil;
+        idDoador = iddoador;
+
+        var img = imagem;
+
+        if (img == 0) {
+          img = img + 1;
+          document.getElementById("imagem-coracao").src = "./coracao-vermelho.png";
+          document.location.reload(true);
+        } else if (img > 0) {
+          document.getElementById("imagem-coracao-vermelho").src = "./coracao.png";
+          document.location.reload(true);
+        }
+
+        event.preventDefault();
+
+        $.ajax({
+          type: "POST",
+          url: "reagir.php",
+          data: {
+            tipo: tipoReacao,
+            tipoperfil: tipoPerfil,
+            idperfil: idDoador,
+            idpost: idPost
+          },
+          success: function(data) {
+            console.log("curtiu");
+          }
+        });
+
+      }
+    </script>
+
     <script src="../../BizLand/assets/vendor/purecounter/purecounter_vanilla.js"></script>
     <script src="../../BizLand/assets/vendor/aos/aos.js"></script>
     <script src="../../BizLand/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

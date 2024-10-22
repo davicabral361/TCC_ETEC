@@ -5,13 +5,17 @@ require_once("../model/Post.php");
 require_once("../model/Comentario.php");
 require_once("../model/Reacao.php");
 require_once("../model/ReacaoComent.php");
-
 require_once("../model/Doador.php");
+require_once("../model/Seguindo.php");
+
+include_once("valida-permanencia.php");
+
 
 $postagem = new Post();
 $coment = new Comentario();
 $reacao = new Reacao();
 $reacaoComent = new ReacaoComent();
+$seguindo = new Seguindo();
 
 if (isset($_POST['btnComentar'])) {
   $idPost = $_POST['btnComentar'];
@@ -102,14 +106,14 @@ if (isset($_POST['btnComentar'])) {
     <section class="letras" style="border: none;">
       <section class="itens-p">
         <section class="letras-aside" style="border: none;">
-          
+
           <section class="banana" id="home1">
             <a href="">
               <img class="icones-side" src="../img/sidedbar/sidebar/menu/Vector.png" alt="">
             </a>
 
             <?php
-            
+
             if (isset($_SESSION['idong'])) {
               $tipoPerfil = 'ong';
               $idPerfil = $_SESSION['idong'];
@@ -124,7 +128,7 @@ if (isset($_POST['btnComentar'])) {
 
               <img class="icones-side" src="../img/sidedbar/sidebar/menu/pessoa.png" alt="">
             </a>
-              <a class="home" href="./perfil.php">Perfil</a>
+            <a class="home" href="./perfil.php">Perfil</a>
           </section>
 
           <section class="banana" id="home12">
@@ -209,84 +213,90 @@ if (isset($_POST['btnComentar'])) {
           $dataCurtida = date('Y-m-d H:i:s');
           ?>
 
-            <form action="" method="" id="form-curtir">
-              <?php
-              if ($reacao->verificar($idPost, $tipoPerfil, $idPerfil) == "curtiu") {
-              ?>
-                <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',1);" name="idPost" value="<?php echo $idPost ?>">
+          <form action="" method="" id="form-curtir">
+            <?php
+            if ($reacao->verificar($idPost, $tipoPerfil, $idPerfil) == "curtiu") {
+            ?>
+              <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',1);" name="idPost" value="<?php echo $idPost ?>">
 
-                  <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao-vermelho">
-                <?php } else { ?>
+                <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao-vermelho">
+              <?php } else { ?>
 
-                  <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',0);" name="idPost" value="<?php echo $idPost ?>">
+                <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',0);" name="idPost" value="<?php echo $idPost ?>">
 
-                    <img src="./coracao.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao">
-                  <?php } ?>
-                  </button>
+                  <img src="./coracao.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao">
+                <?php } ?>
+                </button>
 
-            </form>
+          </form>
 
         </section>
 
 
-      
-
-      <section id="superteste" style="border: 2px solid #5A56E9;justify-content: center;  border: 2px solid #5A56E9;padding: 10px;">
-        <style>
 
 
+        <section id="superteste" style="border: 2px solid #5A56E9;justify-content: center;  border: 2px solid #5A56E9;padding: 10px;">
+          <style>
 
 
 
-        </style>
-
-        <?php
-        foreach ($listarcomentario as $comentario) {
-          $idComentario = $comentario['idcomentario'];
-          $idDoador = $comentario['iddoador'];
-        ?>
 
 
-          <section id="superteste" style="display: flex;flex-direction: column;border: 2px solid #5A56E9;border-radius: 10px;background-color: #E6ECF0;">
-            <section style="display: flex;padding: 10px;">
-              <a>
-                <form action="./view-doador.php" method="post" style="border: 2px solid #5A56E9;border-radius: 50%;">
-                  <button type="submit" name="idDoador" value="<?php echo $idDoador ?>">
-                    <img src="./foto-perfil-doador/<?php echo $comentario['fotodoador']  ?>" style=" width: 50px; height: 50px;" alt="">
-                  </button>
-                </form>
+          </style>
 
-              </a>
-              </button>
-              <section style="display: flex; flex-direction: column;">
-                <p style="font-weight: 700;"><?php echo $comentario['nomedoador'] ?></p>
-                <p style="font-weight: 700;"><?php echo $comentario['datacomentario'] ?></p>
+          <?php
+          foreach ($listarcomentario as $comentario) {
+            $idComentario = $comentario['idcomentario'];
+            $idDoador = $comentario['iddoador'];
+          ?>
 
 
-                <section style="display: flex;">
-
-
-                  <p style="font-weight: 900;margin: 5px;"><?php echo $comentario['comentario'] ?></p>
-                  <form action="" method="" id="form-curtir-coment">
-                    <?php
-                    if ($reacaoComent->verificar($idComentario, $idPerfil, $tipoPerfil) == "curtiuComentario") {
-                    ?>
-                      <button type="submit" id="idComentario" onclick="curtirComent(<?php echo $idComentario ?>,'<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',1);" name="idPost" value="<?php echo $idComentario ?>">
-                        <img src="./coracao-vermelho.png" alt="" style="width: 30px; height: 30px;" id="imagem-coracao-vermelho">
-                      </button>
-                    <?php } else { ?>
-
-                      <button type="submit" id="idComentario" onclick="curtirComent(<?php echo $idComentario ?>,'<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',0);" name="idPost" value="<?php echo $idComentario ?>">
-                        <img src="./coracao.png" alt="" style="width: 30px; height: 30px;" id="imagem-coracao">
-                      </button>
-                    <?php } ?>
-
+            <section id="superteste" style="display: flex;flex-direction: column;border: 2px solid #5A56E9;border-radius: 10px;background-color: #E6ECF0;">
+              <section style="display: flex;padding: 10px;">
+                <a>
+                  <form action="./view-doador.php" method="post" style="border: 2px solid #5A56E9;border-radius: 50%;">
+                    <button type="submit" name="idDoador" value="<?php echo $idDoador ?>">
+                      <img src="./foto-perfil-doador/<?php echo $comentario['fotodoador']  ?>" style=" width: 50px; height: 50px;" alt="">
+                    </button>
                   </form>
 
+                </a>
+                </button>
+                <section style="display: flex; flex-direction: column;">
+                  <p style="font-weight: 700;"><?php echo $comentario['nomedoador'] ?></p>
+                  <p style="font-weight: 700;"><?php echo $comentario['datacomentario'] ?></p>
 
 
+                  <section style="display: flex;">
+
+
+                    <p style="font-weight: 900;margin: 5px;"><?php echo $comentario['comentario'] ?></p>
+                    <form action="" method="" id="form-curtir-coment">
+                      <?php
+                      if ($reacaoComent->verificar($idComentario, $idPerfil, $tipoPerfil) == "curtiuComentario") {
+                      ?>
+                        <button type="submit" id="idComentario" onclick="curtirComent(<?php echo $idComentario ?>,'<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',1);" name="idPost" value="<?php echo $idComentario ?>">
+                          <img src="./coracao-vermelho.png" alt="" style="width: 30px; height: 30px;" id="imagem-coracao-vermelho">
+                        </button>
+                      <?php } else { ?>
+
+                        <button type="submit" id="idComentario" onclick="curtirComent(<?php echo $idComentario ?>,'<?php echo $tipoPerfil ?>','<?php echo $idPerfil ?>',0);" name="idPost" value="<?php echo $idComentario ?>">
+                          <img src="./coracao.png" alt="" style="width: 30px; height: 30px;" id="imagem-coracao">
+                        </button>
+                      <?php } ?>
+
+                    </form>
+
+
+
+                  </section>
                 </section>
+
+
+
               </section>
+
+
 
 
 
@@ -296,9 +306,11 @@ if (isset($_POST['btnComentar'])) {
 
 
 
-          </section>
+          <?php } ?>
 
 
+
+          </div>
 
 
 
@@ -309,46 +321,38 @@ if (isset($_POST['btnComentar'])) {
         </div>
 
 
+        </section>
+        <script>
+          function exbir() {
 
-      <?php } ?>
-
-
-
-      </div>
-
-
-      </section>
-      <script>
-        function exbir() {
-
-          var obj2 = document.getElementById('superteste').hidden = false;
+            var obj2 = document.getElementById('superteste').hidden = false;
 
 
-        }
+          }
 
 
-        var form13 = document.getElementById('form13').hidden = true;
-        var obj = document.getElementById('form12').hidden = true;
+          var form13 = document.getElementById('form13').hidden = true;
+          var obj = document.getElementById('form12').hidden = true;
 
 
 
-        function mostrar() {
+          function mostrar() {
 
-          var obj = document.getElementById('form12').hidden = false;
-          var form13 = document.getElementById('form13').hidden = false;
-          var coment100 = document.getElementById('coment100')
-          coment100.style.padding = '10px'
+            var obj = document.getElementById('form12').hidden = false;
+            var form13 = document.getElementById('form13').hidden = false;
+            var coment100 = document.getElementById('coment100')
+            coment100.style.padding = '10px'
 
 
 
 
-        }
+          }
 
-        function enviar() {
-          var obj2 = document.getElementById('superteste').hidden = false;
+          function enviar() {
+            var obj2 = document.getElementById('superteste').hidden = false;
 
-        }
-      </script>
+          }
+        </script>
 
   </main>
 
@@ -370,44 +374,44 @@ if (isset($_POST['btnComentar'])) {
           <section style="height: 200px; margin-top: 65px; display: flex; flex-direction: column;">
 
 
-            <section class="rosa" style=" display: flex; flex-direction: column; border-radius: 10px; border: 1px solid #5A56E9;">
-              <section style="display: flex; justify-content: left; ">
+            <section style="height: 200px; margin-top: 65px; display: flex; flex-direction: column;">
 
-                <p style="color: #5A56E9; font-weight: 600;" class="maior">Seguindo</p>
 
-                <style>
-                  .maior {
+              <section class="rosa" style=" display: flex; flex-direction: column; border-radius: 10px; border: 1px solid #5A56E9;">
+                <section style="display: flex; justify-content: left; ">
 
-                    font-size: clamp(0.7em, 0.7em + 1vw, 3em);
-                  }
-                </style>
-              </section>
 
-              <section style="display: flex;padding: 0;margin-top: 10px;" class="cortalvez">
-                <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
-                <section style="display: flex; flex-direction: column;">
-                  <p style="font-weight: 600;">Fuladno</p>
-                  <button class="seguindo2"> Seguindo</button>
 
+                  <p style="color: #5A56E9; font-weight: 600;" class="maior">Seguidores</p>
+
+                  <style>
+                    .maior {
+
+                      font-size: clamp(0.7em, 0.7em + 1vw, 3em);
+                    }
+                  </style>
                 </section>
+
+                <?php
+                $listarSeguidores = $seguindo->listarSeguidores($_SESSION['idong']);
+
+                foreach ($listarSeguidores as $listaSeguidores) {
+                ?>
+
+
+                  <section style="display: flex; padding: 0;" class="cortalvez">
+                    <img style="width: 50px; height: 50px; border-radius: 100px;" src="./foto-perfil-doador/<?php echo $listaSeguidores['fotodoador'] ?>" alt="">
+                    <section style="display: flex; flex-direction: column;">
+                      <p style="font-weight: 600;"><?php echo $listaSeguidores['nomedoador'] ?></p>
+                      <button class="seguindo2" style="background-color: #e9ebf7; color: black;"><?php echo $listaSeguidores['emaildoador'] ?></button>
+
+                    </section>
+                  </section>
+
+                <?php } ?>
+
               </section>
 
-              <section style="display: flex; padding: 0;" class="cortalvez">
-                <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
-                <section style="display: flex; flex-direction: column;">
-                  <p style="font-weight: 600;">Fuladno</p>
-                  <button class="seguindo2"> Seguindo</button>
-
-                </section>
-              </section>
-              <section style="display: flex; padding: 0;" class="cortalvez">
-                <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
-                <section style="display: flex; flex-direction: column;">
-                  <p style="font-weight: 600;">Fuladno</p>
-                  <button class="seguindo2"> Seguindo</button>
-
-                </section>
-              </section>
             </section>
 
           </section>

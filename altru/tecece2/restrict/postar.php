@@ -9,6 +9,8 @@
     $msg = $_POST['msg'];
     $data = date('Y-m-d H:i:s');
     $idOng = $_SESSION['idong'];
+    $quantidade = $_POST['txtQuantidade'];
+    $desc = $_POST['txtDescItem'];
 
 
     if(isset($_FILES['imagem'])){
@@ -27,6 +29,8 @@
     $post->setMsg($msg);
     $post->setDtPost($data);
     $post->setIdOng($idOng);
+    $post->setQuantidadeItensDoacao($quantidade);
+    $post->setDescItem($desc);
     
 
     $post->postagem($post);

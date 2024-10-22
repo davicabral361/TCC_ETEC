@@ -38,7 +38,6 @@ try {
   unset($_SESSION['idOngListar']);
 
   $listapost = $post->listarTd();
-  $listaPresta = $presta->listarTD();
 } catch (Exception $e) {
   echo $e->getMessage();
 }
@@ -265,89 +264,121 @@ try {
   </aside>
 
   <main id="elemento-chave" style="border: none; margin-top: 13px;order: 1; ">
+
+    <script type="text/javascript">
+      $(function() {
+        $('.carregando').hide();
+        $('#tipo_publicacao').change(function() {
+
+
+          if ($('#tipo_publicacao').val() == 2) {
+            window.location.href = "http://localhost/altruismus/altru/tecece2/restrict/prestacoes-explorar-doador.php";
+          }
+
+        })
+      })
+
+      // document.location.reload(false);
+    </script>
+
+    <form action="" method="post">
+      <label>Tipo de publicação</label>
+      <select name="tipo_publicacao" id="tipo_publicacao">
+
+        <option value="1" selected>Pedido</option>
+        <option value="2">Prestação de contas</option>
+
+      </select>
+    </form>
+
+    <span class="carregando">Aguarde...</span>
+    <br>
+    <br>
+
     <section style="display: flex;justify-content: center; flex-direction: column-reverse; border: 2px solid #5A56E9;">
 
 
       <?php
-      foreach ($listapost as $post) {
+      if (isset($listapost)) {
+        foreach ($listapost as $post) {
 
-        $idOng = $post['idong'];
-        $idPost = $post['idpost'];
+          $idOng = $post['idong'];
+          $idPost = $post['idpost'];
       ?>
 
 
-        <section style="border-left: none; border-right: none; border-top: 1px solid #5A56E9; ">
+          <section style="border-left: none; border-right: none; border-top: 1px solid #5A56E9; ">
 
 
-          <section class="frase-do-img" style=" padding: 5px;">
-            <form action="./social-doador.php" method="post">
-              <button type="submit" name="idOng" value="<?php echo $idOng ?>" style="border-radius: 50%; border: 2px outset #5A56E9;">
-                <img src="./foto-perfil-ong/<?php echo $post['fotoong'] ?>" style="border-radius: 50%; width: 50px; height: 50px; " alt="">
-              </button>
-            </form>
+            <section class="frase-do-img" style=" padding: 5px;">
+              <form action="./social-doador.php" method="post">
+                <button type="submit" name="idOng" value="<?php echo $idOng ?>" style="border-radius: 50%; border: 2px outset #5A56E9;">
+                  <img src="./foto-perfil-ong/<?php echo $post['fotoong'] ?>" style="border-radius: 50%; width: 50px; height: 50px; " alt="">
+                </button>
+              </form>
 
-            <section style="display: flex; flex-direction: column; padding: 10px;">
+              <section style="display: flex; flex-direction: column; padding: 10px;">
 
-              <p class="nome-ong"><?php echo $nomeOng = $post['nomeong'] ?></p>
-              <!-- <p> @ADB</p> -->
+                <p class="nome-ong"><?php echo $nomeOng = $post['nomeong'] ?></p>
+                <!-- <p> @ADB</p> -->
 
-              <style>
-
-
-
-              </style>
-
-              <p style="font-weight: 600;"><?php echo $post['dtpost'] ?></p>
-
-            </section>
+                <style>
 
 
-          </section>
 
-          <section class="" style="border-top: #5A56E9 2px solid; border-bottom: #5A56E9 2px solid #5A56E9;">
-            <section class="frase">
-              <section class="juncao">
-                <p id="headerletter2"><?php echo $post['msgpost'] ?></p>
+                </style>
+
+                <p style="font-weight: 600;"><?php echo $post['dtpost'] ?></p>
+
               </section>
 
 
-              <section>
-                <img style="width: 300px;" src="./social-img/<?php echo $post['imagempost'] ?>" alt="">
-              </section>
-
             </section>
-          </section>
 
-          <section id="cobaia" style="display: flex; justify-content: center; justify-content: space-around; border-top: 2px solid #5A56E9; align-items: center;">
+            <section class="" style="border-top: #5A56E9 2px solid; border-bottom: #5A56E9 2px solid #5A56E9;">
+              <section class="frase">
+                <section class="juncao">
+                  <p id="headerletter2"><?php echo $post['msgpost'] ?></p>
+                </section>
 
-            <form action="" method="" id="form-curtir">
+
+                <section>
+                  <img style="width: 300px;" src="./social-img/<?php echo $post['imagempost'] ?>" alt="">
+                </section>
+
+              </section>
+            </section>
+
+            <section id="cobaia" style="display: flex; justify-content: center; justify-content: space-around; border-top: 2px solid #5A56E9; align-items: center;">
+
+              <form action="" method="" id="form-curtir">
+                <?php
+                if ($reacao->verificar($idPost, $tipoPerfil, $idPerfil) == "curtiu") {
+                ?>
+                  <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','doador','<?php echo $idPerfil ?>',1);" name="idPost" value="<?php echo $idPost ?>">
+
+                    <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao-vermelho">
+                  <?php } else { ?>
+
+                    <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','doador','<?php echo $idPerfil ?>',0);" name="idPost" value="<?php echo $idPost ?>">
+
+                      <img src="./coracao.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao">
+                    <?php } ?>
+                    </button>
+
+              </form>
+
               <?php
-              if ($reacao->verificar($idPost, $tipoPerfil, $idPerfil) == "curtiu") {
+              $dataCurtida = date('Y-m-d H:i:s');
               ?>
-                <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','doador','<?php echo $idPerfil ?>',1);" name="idPost" value="<?php echo $idPost ?>">
-
-                  <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao-vermelho">
-                <?php } else { ?>
-
-                  <button type="submit" id="idPost" onclick="valorBotao(<?php echo $idPost ?>,'curtida','doador','<?php echo $idPerfil ?>',0);" name="idPost" value="<?php echo $idPost ?>">
-
-                    <img src="./coracao.png" alt="" style="width: 50px; height: 50px;" id="imagem-coracao">
-                  <?php } ?>
-                  </button>
-
-            </form>
-
-            <?php
-            $dataCurtida = date('Y-m-d H:i:s');
-            ?>
 
 
-            <form action="./tela-comentario-doador.php" method="post">
-              <button type="submit" value="<?php echo $idPost ?>" name="btnComentar">COMENTAR</button>
-            </form>
+              <form action="./tela-comentario-doador.php" method="post">
+                <button type="submit" value="<?php echo $idPost ?>" name="btnComentar">COMENTAR</button>
+              </form>
 
 
-            <!-- <section id="beleza" >
+              <!-- <section id="beleza" >
 
                         <h3  onclick="comentar();" >Comentar</h3>
 
@@ -359,122 +390,55 @@ try {
                 </section>        -->
 
 
-          </section>
-
-          <?php
-           }foreach ($listaPresta as $presta) {
-            $idOng = $presta['idong'];
-            $idPresta = $presta['idPrestacaoContasOng'];
-          ?>
-
-            <section class="frase-do-img">
-              <form action="./social-doador.php" method="post">
-                <button type="submit" name="idOng" value="<?php echo $idOng ?>">
-                  <img src="./foto-perfil-ong/<?php echo $presta['fotoong'] ?>" style="border-radius: 50%; width: 50px; height: 50px;" alt="">
-                </button>
-              </form>
-              <p class="nome-ong"><?php echo $nomeOng = $presta['nomeong'] ?></p>
-              <!-- <p> @ADB</p> -->
-          
-              <p><?php echo $presta['dataRecebimento'] ?></p>
             </section>
 
-            <section class="">
-              <section class="frase">
-                <section class="juncao">
-                  <p class="desc"><?php echo $presta['descProdutosRecebidos'] ?></p>
-                </section>
+        <?php
+        }
+      }
+        ?>
 
-                <section>
-                  <p class="desc"> Quantidades de Itens recebidos <?php echo $presta['quantidadeItensRecebido'] ?></p>
-
-                </section>
-
-                <section style="display: flex;">
-
-
-                  <section>
-                    <img class="img-responsive" width="50px" src="./social-img/<?php echo $presta['fotoOng'] ?>" alt="">
-                  </section>
-  
-                  <section>
-                    <img class="img-responsive" width="50px" src="./social-img/<?php echo $presta['fotoDoador'] ?>" alt="">
-                  </section>
-
-                </section>
-
-
-              </section>
-            </section>
-
-            <form action="./reagirPresta.php" method="post">
-
-              <button type="submit" name="idPrestacao" value="<?php echo $idPresta ?>">
-
-                <?php
-                if ($reacaoPresta->verificar($idPresta, $tipoPerfil, $idPerfil) == "curtiu") {
-                ?>
-                  <img src="./coracao-vermelho.png" alt="" style="width: 50px; height: 50px;">
-                <?php } else { ?>
-                  <img src="./coracao.png" alt="" style="width: 50px; height: 50px;">
-                <?php } ?>
-              </button>
-
-            </form>
-
-          <?php } ?>
-
-
-
+        <script>
           <?php
 
 
-          $var25 = $nomeOng;
+          //  echo "var jsvar ='$var';";
+
+          //  echo "var jsvar2 ='$var2';";
 
 
+          echo "var jsvar25 ='$var25';";
+
+          //  echo "var jsvar3 ='$var3';";
           ?>
-          <script>
-            <?php
+
+          //graficos de pizza
+
+          // por mes
+          var mostrar = document.getElementById('mostrar')
 
 
-            //  echo "var jsvar ='$var';";
+          mostrar.innerText = ''
 
-            //  echo "var jsvar2 ='$var2';";
-
-
-            echo "var jsvar25 ='$var25';";
-
-            //  echo "var jsvar3 ='$var3';";
-            ?>
-
-            //graficos de pizza
-
-            // por mes
-            var mostrar = document.getElementById('mostrar')
-
-
+          function menos() {
             mostrar.innerText = ''
+          }
 
-            function menos() {
-              mostrar.innerText = ''
-            }
+          function comentar() {
+            mostrar.innerText = jsvar25
+            var menos = document.getElementById('comentarios')
+            menos.innerText = 'mostrar menos'
 
-            function comentar() {
-              mostrar.innerText = jsvar25
-              var menos = document.getElementById('comentarios')
-              menos.innerText = 'mostrar menos'
+          }
 
-            }
+          function mais() {
+            menos.innerHTML = ''
+            mostrar.innerHTML = ''
 
-            function mais() {
-              menos.innerHTML = ''
-              mostrar.innerHTML = ''
-
-            }
-          </script>
+          }
+        </script>
 
 
-        </section>
+          </section>
 
     </section>
 
@@ -587,14 +551,14 @@ try {
       tipoReacao = reacao;
       tipoPerfil = perfil;
       idDoador = iddoador;
-   
+
       var img = imagem;
 
       if (img == 0) {
         img = img + 1;
         document.getElementById("imagem-coracao").src = "./coracao-vermelho.png";
-        
-   
+
+
         document.location.reload(false);
       } else if (img > 0) {
         document.getElementById("imagem-coracao-vermelho").src = "./coracao.png";

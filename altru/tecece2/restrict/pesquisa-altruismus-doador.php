@@ -306,14 +306,7 @@ align-items: center;
 </form>
 </section>
 
-
-
-
 </section>
-
-
-
-
 
 
 </aside>

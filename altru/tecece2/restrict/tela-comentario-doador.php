@@ -4,13 +4,17 @@ session_start();
 require_once("../model/Post.php");
 require_once("../model/Comentario.php");
 require_once("../model/Reacao.php");
+require_once("../model/Seguindo.php");
 require_once("../model/ReacaoComent.php");
+
+include_once("valida-permanencia.php");
 
 require_once("../model/Doador.php");
 
 $postagem = new Post();
 $coment = new Comentario();
 $reacao = new Reacao();
+$seguindo = new Seguindo();
 $reacaoComent = new ReacaoComent();
 
 if (isset($_POST['btnComentar'])) {
@@ -22,6 +26,8 @@ if (isset($_POST['btnComentar'])) {
     $listarcomentario = $coment->listar($_SESSION['post']);
     $listarpostagem = $postagem->listarPostId($_SESSION['post']);
 }
+
+$listarSeguindo = $seguindo->listarSeguindo($_SESSION['iddoador']);
 
 ?>
 
@@ -123,9 +129,9 @@ if (isset($_POST['btnComentar'])) {
                             <a class="home" href="./explorar-doador.php">Explorar</a>
                         <?php
                         }
-                        
+
                         ?>
-                            
+
                     </section>
 
 
@@ -428,65 +434,61 @@ if (isset($_POST['btnComentar'])) {
 
                         </button>
 
-                        <section style="height: 200px; margin-top: 65px; display: flex; flex-direction: column;">
+                        <section class="rosa" style=" display: flex; flex-direction: column; border-radius: 10px; border: 1px solid #5A56E9;">
+                            <section style="display: flex; justify-content: left; ">
 
 
-                            <section class="rosa" style=" display: flex; flex-direction: column; border-radius: 10px; border: 1px solid #5A56E9;">
-                                <section style="display: flex; justify-content: left; ">
 
-                                    <p style="color: #5A56E9; font-weight: 600;" class="maior">Seguindo</p>
+                                <p style="color: #5A56E9; font-weight: 600;" class="maior">Seguindo</p>
 
-                                    <style>
-                                        .maior {
+                                <style>
+                                    .maior {
 
-                                            font-size: clamp(0.7em, 0.7em + 1vw, 3em);
-                                        }
-                                    </style>
-                                </section>
+                                        font-size: clamp(0.7em, 0.7em + 1vw, 3em);
+                                    }
+                                </style>
+                            </section>
+
+                            <?php
+
+                            foreach ($listarSeguindo as $listar) {
+                                $idOng = $listar['idong'];
+                            ?>
 
                                 <section style="display: flex;padding: 0;margin-top: 10px;" class="cortalvez">
-                                    <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
+                                    <img style="width: 50px; height: 50px; border-radius: 100px;" src="./foto-perfil-ong/<?php echo $listar['fotoong'] ?>" alt="">
                                     <section style="display: flex; flex-direction: column;">
-                                        <p style="font-weight: 600;">Fuladno</p>
-                                        <button class="seguindo2"> Seguindo</button>
+                                        <p style="font-weight: 600;"><?php echo $listar['nomeong'] ?></p>
+                                        <form action="./social-doador.php" method="post">
+                                            <button name="idOng" class="seguindo2" value="<?php echo $idOng ?>">Seguindo</button>
+                                        </form>
 
                                     </section>
+
                                 </section>
 
-                                <section style="display: flex; padding: 0;" class="cortalvez">
-                                    <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
-                                    <section style="display: flex; flex-direction: column;">
-                                        <p style="font-weight: 600;">Fuladno</p>
-                                        <button class="seguindo2"> Seguindo</button>
+                            <?php } ?>
 
-                                    </section>
-                                </section>
-                                <section style="display: flex; padding: 0;" class="cortalvez">
-                                    <img style="width: 50px; height: 50px; border-radius: 100px;" src="../img/631b7543a5d0d.jpg" alt="">
-                                    <section style="display: flex; flex-direction: column;">
-                                        <p style="font-weight: 600;">Fuladno</p>
-                                        <button class="seguindo2"> Seguindo</button>
 
-                                    </section>
-                                </section>
-                            </section>
 
                         </section>
 
-
-                        <style>
-                            .seguindo2 {
-                                background-color: #5A56E9;
-                                color: #e9ebf7;
-                                font-weight: 600;
-                                border-radius: 10px;
-                            }
-                        </style>
-
-
-
-
             </section>
+
+
+            <style>
+                .seguindo2 {
+                    background-color: #5A56E9;
+                    color: #e9ebf7;
+                    font-weight: 600;
+                    border-radius: 10px;
+                }
+            </style>
+
+
+
+
+        </section>
 
 
 
@@ -511,18 +513,9 @@ if (isset($_POST['btnComentar'])) {
         </section>
 
 
-
-
         </section>
 
-
-
-
-
-
     </aside>
-
-
 
     <script type="text/javascript">
         var posicao = localStorage.getItem('posicaoScroll');
